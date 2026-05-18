@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Categories — The Daily Write{% endblock %}
+{% block content %}
+<div class="container page-body">
+
+    <div class="section-header">
+        <h2>Categories</h2>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-sm">← Dashboard</a>
+    </div>
+
+    <!-- Add category form -->
+    <div class="form-card" style="margin-bottom:2.5rem;max-width:460px;">
+        <h3 style="margin-bottom:1rem;">Add a Category</h3>
+        <form method="POST" action="{{ url_for('new_category') }}" style="display:flex;gap:0.75rem;">
+            <input type="text" name="name" required placeholder="e.g. Travel, Tech, Opinion…"
+                   style="flex:1;">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+
+    <!-- Existing categories -->
+    {% if categories %}
+    <table class="data-table" style="max-width:600px;">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cat in categories %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('category_posts', cat_id=cat.id) }}" class="cat-tag">{{ cat.name }}</a>
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_category', cat_id=cat.id) }}" style="display:inline;"
+                          onsubmit="return confirm('Delete category \'{{ cat.name }}\'? Posts will be uncategorized.')">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="empty-state" style="max-width:500px;">
+            <h3>No categories yet</h3>
+            <p>Add your first category above to organize your posts.</p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
