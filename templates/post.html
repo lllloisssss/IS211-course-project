@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} — The Daily Write{% endblock %}
+{% block content %}
+<div class="container page-body">
+    <article class="post-full">
+        <header class="post-header">
+            {% if post.category_name %}
+                <a class="cat-tag" href="{{ url_for('category_posts', cat_id=post.category_id) }}" style="margin-bottom:0.75rem;display:inline-block;">{{ post.category_name }}</a>
+            {% endif %}
+            <h1>{{ post.title }}</h1>
+            <p class="post-byline">By {{ post.author_name }} &nbsp;·&nbsp; {{ post.created_at[:10] }}</p>
+        </header>
+
+        <div class="post-content">
+            {{ post.content | safe }}
+        </div>
+
+        <!-- Permalink (extra credit) -->
+        <div class="permalink-box">
+            <label>Permalink</label>
+            <code>{{ request.host_url }}post/{{ post.slug }}</code>
+        </div>
+    </article>
+
+    <div style="margin-top:2.5rem;">
+        <a href="{{ url_for('index') }}" class="btn">← Back to all posts</a>
+    </div>
+</div>
+{% endblock %}
