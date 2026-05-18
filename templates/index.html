@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}The Daily Write — Home{% endblock %}
+{% block content %}
+<div class="container page-body">
+
+    {% if posts %}
+        <div class="posts-grid">
+        {% for post in posts %}
+            <article class="post-card">
+                <div class="post-card-meta">
+                    {{ post.author_name }}
+                    {% if post.category_name %}
+                        &nbsp;·&nbsp;
+                        <a class="cat-tag" href="{{ url_for('category_posts', cat_id=post.category_id) }}">{{ post.category_name }}</a>
+                    {% endif %}
+                    &nbsp;·&nbsp;
+                    {{ post.created_at[:10] }}
+                </div>
+                <h2 class="post-card-title">
+                    <a href="{{ url_for('view_post', slug=post.slug) }}">{{ post.title }}</a>
+                </h2>
+                <p class="post-card-excerpt">
+                    {{ post.content | striptags | truncate(140, True, '…') }}
+                </p>
+                <div class="post-card-footer">
+                    <a class="read-more" href="{{ url_for('view_post', slug=post.slug) }}">Read more →</a>
+                </div>
+            </article>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No posts yet.</h3>
+            <p>Check back soon — or <a href="{{ url_for('login') }}">log in</a> to write the first one.</p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
