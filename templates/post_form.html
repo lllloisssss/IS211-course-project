@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit Post' if post else 'New Post' }} — The Daily Write{% endblock %}
+{% block content %}
+<div class="container page-body">
+
+    <div class="page-heading">
+        <p class="eyebrow">{{ 'Editing' if post else 'New Post' }}</p>
+        <h1>{{ post.title if post else 'Write Something' }}</h1>
+    </div>
+
+    <div class="form-card">
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Post Title</label>
+                <input type="text" id="title" name="title" required
+                       value="{{ post.title if post else '' }}"
+                       placeholder="A compelling headline…">
+            </div>
+
+            <div class="form-group">
+                <label for="category_id">Category <span style="color:var(--rule);">(optional)</span></label>
+                <select id="category_id" name="category_id">
+                    <option value="">— None —</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if post and post.category_id == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <p style="font-size:0.75rem;color:var(--muted);margin-top:0.35rem;font-family:'DM Mono',monospace;">
+                    Manage categories in the <a href="{{ url_for('manage_categories') }}">categories page</a>.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content <span style="color:var(--rule);">(HTML supported)</span></label>
+                <textarea id="content" name="content" required
+                          placeholder="Tell your story…">{{ post.content if post else '' }}</textarea>
+            </div>
+
+            <div style="display:flex;gap:1rem;align-items:center;">
+                <button type="submit" class="btn btn-primary">
+                    {{ 'Save Changes' if post else 'Publish Post' }}
+                </button>
+                <a href="{{ url_for('dashboard') }}" class="btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
